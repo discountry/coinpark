@@ -128,6 +128,34 @@ class Coinpark():
         }]
         return self.signed_request('orderpending', raw_cmds)['result']
     
+    def batch_limit_buy_sell(self, pair, price, amount):
+        raw_cmds = [{
+            'cmd': "orderpending/trade",
+            'index': randint(1,99999),
+            'body': {
+                'pair': pair, # BIX_BTC, BIX_ETH
+                'account_type': 0,
+                'order_type': 2,
+                'order_side': 1,
+                'pay_bix': 0,
+                'price': price,
+                'amount': amount,
+            }
+        }, {
+            'cmd': "orderpending/trade",
+            'index': randint(1,99999),
+            'body': {
+                'pair': pair, # BIX_BTC, BIX_ETH
+                'account_type': 0,
+                'order_type': 2,
+                'order_side': 2,
+                'pay_bix': 0,
+                'price': price,
+                'amount': amount,
+            }
+        }]
+        return self.signed_request('orderpending', raw_cmds)['result']
+    
     def limit_buy(self, pair, price, amount):
         return self.post_order(pair, 0, 2, 1, 0, price, amount, None)
     
